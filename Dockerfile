@@ -1,10 +1,10 @@
-FROM python:3.11.2-alpine
+FROM python:3.11.2-slim-bullseye
 
 WORKDIR /app
 
 COPY . .
 
 RUN pip install -r requirements.in
-RUN pip freeze > requirements.txt
+RUN pip-compile --generate-hashes requirements.in
 
 CMD ["/bin/bash"]
