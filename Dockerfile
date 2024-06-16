@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install -r requirements.in
+RUN pip install pip-tools
 RUN pip-compile --generate-hashes requirements.in
 
 CMD ["/bin/bash"]
