@@ -1,12 +1,10 @@
-FROM python:3.11
+FROM python:3.11.2-slim-bullseye
 
 WORKDIR /app
-COPY ./statistics /app/statistics
-COPY ./pyproject.toml /app
-COPY ./README.md /app
 
-RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install
+COPY . .
+
+RUN pip install pip-tools
+RUN pip-compile --generate-hashes pyproject.toml
 
 CMD ["/bin/bash"]
