@@ -25,6 +25,10 @@ class ModelEval:
     mape: float
 
     @classmethod
+    def metrics(cls) -> list[str]:
+        return list(cls.__annotations__.keys())
+
+    @classmethod
     def from_predictions(cls, predictions: Predictions) -> "ModelEval":
         return cls(
             r2=r2_score(predictions.y_true_test, predictions.y_pred_test),
