@@ -16,8 +16,7 @@ def main() -> None:
     )
     tabular_data = Tabular(df, target_column="target")
     transformer = TabularTransform(target_transform=Identity()).fit(tabular_data)
-    data = transformer.transform(tabular_data)
-    x, y = data[:, :-1], data[:, -1]
+    x, y = df.values[:, :-1], df.values[:, -1]
 
     rf = RandomForestRegressor(n_estimators=200)
     rf.fit(x, y)
