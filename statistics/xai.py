@@ -19,7 +19,6 @@ def explain(
     x_train: pd.DataFrame,
     y_train: pd.Series,
     x_val: pd.DataFrame,
-    y_val: pd.DataFrame,
 ) -> None:
     explainers = TabularExplainer(
         explainers=["lime", "shap", "sensitivity", "pdp", "ale"],
@@ -40,10 +39,10 @@ def explain(
 
 def main() -> None:
     x, y = load_diabetes(return_X_y=True, as_frame=True)
-    x_train, x_val, y_train, y_val = train_test_split(x, y, test_size=0.2)
+    x_train, x_val, y_train, _ = train_test_split(x, y, test_size=0.2)
     rf = RandomForestRegressor()
     rf.fit(x, y.values.ravel())
-    explain(rf, x_train, y_train, x_val, y_val)
+    explain(rf, x_train, y_train, x_val)
 
 
 if __name__ == "__main__":
