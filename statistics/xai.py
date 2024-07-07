@@ -3,8 +3,6 @@ import pandas as pd
 from sklearn.datasets import fetch_california_housing
 from sklearn.ensemble import RandomForestRegressor
 from omnixai.data.tabular import Tabular
-from omnixai.preprocessing.base import Identity
-from omnixai.preprocessing.tabular import TabularTransform
 from omnixai.explainers.tabular import TabularExplainer
 
 
@@ -14,20 +12,17 @@ def main() -> None:
         np.concatenate([housing.data, housing.target.reshape((-1, 1))], axis=1),
         columns=list(housing.feature_names) + ["target"],
     )
-    tabular_data = Tabular(df, target_column="target")
-    transformer = TabularTransform(target_transform=Identity()).fit(tabular_data)
     x, y = df.values[:, :-1], df.values[:, -1]
 
-    rf = RandomForestRegressor(n_estimators=200)
+    rf = RandomForestRegressor()
     rf.fit(x, y)
 
-    # Initialize a TabularExplainer
     explainers = TabularExplainer(
         explainers=["lime", "shap", "sensitivity", "pdp", "ale"],
         mode="regression",
-        data=tabular_data,
+        data=Tabular(df, target_column="target"),
         model=rf,
-        preprocess=lambda z: transformer.transform(z),
+        preprocess=lambda z: z.data.values,
     )
     explanations = explainers.explain_global()
 
