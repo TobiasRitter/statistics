@@ -7,3 +7,4 @@ requirements.txt
 build/
 *.egg-info/
 dist/
+*.html

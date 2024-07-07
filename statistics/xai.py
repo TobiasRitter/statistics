@@ -3,6 +3,8 @@ from sklearn.datasets import load_diabetes
 from sklearn.ensemble import RandomForestRegressor
 from omnixai.data.tabular import Tabular
 from omnixai.explainers.tabular import TabularExplainer
+from omnixai.explanations.base import DashFigure
+from plotly.graph_objects import Figure
 
 
 def explain(model, x: pd.DataFrame, y: pd.Series) -> None:
@@ -18,6 +20,10 @@ def explain(model, x: pd.DataFrame, y: pd.Series) -> None:
     explanations["sensitivity"].ipython_plot()
     explanations["pdp"].ipython_plot()
     explanations["ale"].ipython_plot()
+
+    a: DashFigure = explanations["sensitivity"].plotly_plot()
+    b: Figure = a.component
+    b.write_html("sensitivity.html")
 
 
 def main() -> None:
