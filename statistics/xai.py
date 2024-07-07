@@ -1,6 +1,5 @@
-import numpy as np
 import pandas as pd
-from sklearn.datasets import fetch_california_housing
+from sklearn.datasets import load_diabetes
 from sklearn.ensemble import RandomForestRegressor
 from omnixai.data.tabular import Tabular
 from omnixai.explainers.tabular import TabularExplainer
@@ -22,13 +21,7 @@ def explain(model, x: pd.DataFrame, y: pd.Series) -> None:
 
 
 def main() -> None:
-    housing = fetch_california_housing()
-    df = pd.DataFrame(
-        np.concatenate([housing.data, housing.target.reshape((-1, 1))], axis=1),
-        columns=list(housing.feature_names) + ["target"],
-    )
-    x, y = df[list(housing.feature_names)], df["target"]
-
+    x, y = load_diabetes(return_X_y=True, as_frame=True)
     rf = RandomForestRegressor()
     rf.fit(x, y.values.ravel())
     explain(rf, x, y)
