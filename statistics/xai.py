@@ -12,15 +12,15 @@ def main() -> None:
         np.concatenate([housing.data, housing.target.reshape((-1, 1))], axis=1),
         columns=list(housing.feature_names) + ["target"],
     )
-    x, y = df.values[:, :-1], df.values[:, -1]
+    x, y = df[list(housing.feature_names)], df[["target"]]
 
     rf = RandomForestRegressor()
-    rf.fit(x, y)
+    rf.fit(x, y.values.ravel())
 
     explainers = TabularExplainer(
         explainers=["lime", "shap", "sensitivity", "pdp", "ale"],
         mode="regression",
-        data=Tabular(df, target_column="target"),
+        data=Tabular(pd.concat([x, y], axis=1), target_column="target"),
         model=rf,
         preprocess=lambda tabular: tabular.data.values,
     )
