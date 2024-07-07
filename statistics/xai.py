@@ -22,14 +22,11 @@ def main() -> None:
     rf = RandomForestRegressor(n_estimators=200)
     rf.fit(x, y)
 
-    # Convert the transformed data back to Tabular instances
-    train_data = transformer.invert(x)
-
     # Initialize a TabularExplainer
     explainers = TabularExplainer(
         explainers=["lime", "shap", "sensitivity", "pdp", "ale"],
         mode="regression",
-        data=train_data,
+        data=tabular_data,
         model=rf,
         preprocess=lambda z: transformer.transform(z),
     )
