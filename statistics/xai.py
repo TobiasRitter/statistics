@@ -20,15 +20,15 @@ def explain(
     y_train: pd.Series,
     x_val: pd.DataFrame,
 ) -> None:
-    explainers = TabularExplainer(
+    explainer = TabularExplainer(
         explainers=["lime", "shap", "sensitivity", "pdp", "ale"],
         mode="regression",
         data=Tabular(pd.concat([x_train, y_train], axis=1), target_column=y_train.name),
         model=model,
         preprocess=lambda tabular: tabular.data.values,
     )
-    local_explains = explainers.explain(x_val)
-    global_explains = explainers.explain_global()
+    local_explains = explainer.explain(x_val)
+    global_explains = explainer.explain_global()
 
     plot_explanation(local_explains["lime"], Path("lime.html"))
     plot_explanation(local_explains["shap"], Path("shap.html"))
