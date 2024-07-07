@@ -10,6 +10,7 @@ dependencies = [
     "scikit-learn",
     "pandas",
     "pytest",
+    "omnixai",
 ]
 
 [build-system]
