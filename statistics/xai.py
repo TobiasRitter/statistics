@@ -22,15 +22,12 @@ def main() -> None:
         mode="regression",
         data=Tabular(df, target_column="target"),
         model=rf,
-        preprocess=lambda z: z.data.values,
+        preprocess=lambda tabular: tabular.data.values,
     )
     explanations = explainers.explain_global()
 
-    print("Sensitivity results:")
     explanations["sensitivity"].ipython_plot()
-    print("PDP results:")
     explanations["pdp"].ipython_plot()
-    print("ALE results:")
     explanations["ale"].ipython_plot()
 
 
