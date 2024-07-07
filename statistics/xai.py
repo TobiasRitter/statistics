@@ -1,10 +1,17 @@
+from pathlib import Path
 import pandas as pd
 from sklearn.datasets import load_diabetes
 from sklearn.ensemble import RandomForestRegressor
 from omnixai.data.tabular import Tabular
 from omnixai.explainers.tabular import TabularExplainer
-from omnixai.explanations.base import DashFigure
+from omnixai.explanations.base import ExplanationBase
 from plotly.graph_objects import Figure
+
+
+def plot_explanation(explanation: ExplanationBase, path: Path) -> None:
+    fig: Figure = explanation.plotly_plot().component
+    fig.write_html(path)
+    pass
 
 
 def explain(model, x: pd.DataFrame, y: pd.Series) -> None:
@@ -17,13 +24,9 @@ def explain(model, x: pd.DataFrame, y: pd.Series) -> None:
     )
     explanations = explainers.explain_global()
 
-    explanations["sensitivity"].ipython_plot()
-    explanations["pdp"].ipython_plot()
-    explanations["ale"].ipython_plot()
-
-    a: DashFigure = explanations["sensitivity"].plotly_plot()
-    b: Figure = a.component
-    b.write_html("sensitivity.html")
+    plot_explanation(explanations["sensitivity"], Path("sensitivity.html"))
+    plot_explanation(explanations["pdp"], Path("pdp.html"))
+    plot_explanation(explanations["ale"], Path("ale.html"))
 
 
 def main() -> None:
