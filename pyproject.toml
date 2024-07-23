@@ -12,6 +12,7 @@ dependencies = [
     "pytest",
     "omnixai",
     "plotly",
+    "ucimlrepo",
 ]
 
 [build-system]
